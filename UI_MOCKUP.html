@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercy AI Court - UI Mockup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #000000;
+            color: #FFFFFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 1920px;
+            height: 1080px;
+            position: relative;
+            border: 2px solid #333;
+        }
+
+        .title {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 60px;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: 4px;
+        }
+
+        .timer-section {
+            position: absolute;
+            left: 200px;
+            top: 300px;
+            text-align: center;
+        }
+
+        .timer-label {
+            font-size: 24px;
+            color: #B0B0B0;
+            margin-bottom: 10px;
+        }
+
+        .timer-display {
+            font-size: 80px;
+            font-weight: bold;
+            color: #FFFFFF;
+        }
+
+        .guilt-section {
+            position: absolute;
+            right: 200px;
+            top: 300px;
+            text-align: center;
+        }
+
+        .guilt-label {
+            font-size: 24px;
+            color: #B0B0B0;
+            margin-bottom: 10px;
+        }
+
+        .guilt-display {
+            font-size: 80px;
+            font-weight: bold;
+        }
+
+        .guilt-red { color: #FF0000; }
+        .guilt-yellow { color: #FFFF00; }
+        .guilt-green { color: #00FF00; }
+
+        .guilt-meter-section {
+            position: absolute;
+            bottom: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            text-align: center;
+        }
+
+        .guilt-meter-label {
+            font-size: 20px;
+            color: #B0B0B0;
+            margin-bottom: 10px;
+        }
+
+        .guilt-meter-container {
+            width: 100%;
+            height: 40px;
+            background-color: #333333;
+            border: 2px solid #666;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .guilt-meter-fill {
+            height: 100%;
+            background-color: #FF0000;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .testing-panel {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 300px;
+            background-color: rgba(20, 20, 20, 0.95);
+            border: 2px solid #444;
+            padding: 15px;
+            display: none;
+        }
+
+        .testing-panel.visible {
+            display: block;
+        }
+
+        .testing-panel h3 {
+            color: #FFFF00;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .testing-panel .status {
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .testing-panel .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .testing-panel button {
+            background-color: #444;
+            color: #FFF;
+            border: 1px solid #666;
+            padding: 10px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .testing-panel button:hover {
+            background-color: #555;
+        }
+
+        .testing-panel button.wide {
+            grid-column: 1 / -1;
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+            color: #888;
+            text-align: center;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        .screen h1 {
+            font-size: 60px;
+            margin-bottom: 100px;
+        }
+
+        .screen button {
+            background-color: #333;
+            color: #FFF;
+            border: 2px solid #666;
+            padding: 20px 40px;
+            margin: 10px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 24px;
+        }
+
+        .screen button:hover {
+            background-color: #444;
+        }
+
+        .victory-text {
+            color: #00FF00;
+        }
+
+        .gameover-text {
+            color: #FF0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Main Menu Screen -->
+        <div class="screen active" id="mainMenu">
+            <h1>MERCY AI COURT SYSTEM</h1>
+            <button onclick="startGame()">START INTERROGATION</button>
+            <button onclick="alert('This is a demo')">QUIT</button>
+        </div>
+
+        <!-- Interrogation Screen -->
+        <div class="screen" id="interrogation">
+            <div class="title">MERCY AI COURT SYSTEM</div>
+
+            <div class="timer-section">
+                <div class="timer-label">TIME REMAINING</div>
+                <div class="timer-display" id="timer">90:00</div>
+            </div>
+
+            <div class="guilt-section">
+                <div class="guilt-label">GUILT LEVEL</div>
+                <div class="guilt-display guilt-red" id="guilt">98%</div>
+            </div>
+
+            <div class="guilt-meter-section">
+                <div class="guilt-meter-label">GUILT METER</div>
+                <div class="guilt-meter-container">
+                    <div class="guilt-meter-fill" id="guiltMeter" style="width: 98%;"></div>
+                </div>
+            </div>
+
+            <div class="instructions">Press T to toggle Testing Panel</div>
+        </div>
+
+        <!-- Victory Screen -->
+        <div class="screen" id="victory">
+            <h1 class="victory-text">VERDICT: NOT GUILTY</h1>
+            <p style="font-size: 24px; margin-bottom: 50px;">Guilt reduced to <span id="finalGuilt">90</span>%</p>
+            <button onclick="restartGame()">RESTART</button>
+            <button onclick="mainMenu()">MAIN MENU</button>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div class="screen" id="gameover">
+            <h1 class="gameover-text">VERDICT: GUILTY</h1>
+            <p style="font-size: 24px; margin-bottom: 50px;">Execution initiated</p>
+            <button onclick="restartGame()">RESTART</button>
+            <button onclick="mainMenu()">MAIN MENU</button>
+        </div>
+
+        <!-- Testing Panel -->
+        <div class="testing-panel" id="testingPanel">
+            <h3>TESTING PANEL (T)</h3>
+            <div class="status" id="status">
+                State: Interrogation<br>
+                Guilt: 98%<br>
+                Time: 90:00<br>
+                Paused: No
+            </div>
+            <div class="controls">
+                <button onclick="adjustGuilt(5)">Guilt +</button>
+                <button onclick="adjustGuilt(-5)">Guilt -</button>
+                <button onclick="adjustTime(60)">Time +</button>
+                <button onclick="adjustTime(-60)">Time -</button>
+                <button onclick="skipToWin()">Win</button>
+                <button onclick="skipToLose()">Lose</button>
+                <button onclick="restartGame()" class="wide">Reset</button>
+                <button onclick="togglePause()" class="wide">Pause</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentState = 'mainMenu';
+        let guilt = 98;
+        let timeRemaining = 5400; // 90 minutes in seconds
+        let isPaused = false;
+        let timerInterval = null;
+
+        function showScreen(screenName) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenName).classList.add('active');
+            currentState = screenName;
+            updateStatus();
+        }
+
+        function startGame() {
+            guilt = 98;
+            timeRemaining = 5400;
+            isPaused = false;
+            showScreen('interrogation');
+            updateDisplay();
+            startTimer();
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (!isPaused && currentState === 'interrogation') {
+                    timeRemaining -= 18; // 18 game seconds per real second
+                    if (timeRemaining <= 0) {
+                        timeRemaining = 0;
+                        clearInterval(timerInterval);
+                        if (guilt >= 92) {
+                            showScreen('gameover');
+                        }
+                    }
+                    updateDisplay();
+                }
+            }, 1000);
+        }
+
+        function updateDisplay() {
+            // Update timer
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timer').textContent = 
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+            // Update guilt
+            const guiltDisplay = document.getElementById('guilt');
+            guiltDisplay.textContent = `${Math.round(guilt)}%`;
+            
+            // Update guilt color
+            guiltDisplay.classList.remove('guilt-red', 'guilt-yellow', 'guilt-green');
+            if (guilt >= 90) {
+                guiltDisplay.classList.add('guilt-red');
+            } else if (guilt >= 50) {
+                guiltDisplay.classList.add('guilt-yellow');
+            } else {
+                guiltDisplay.classList.add('guilt-green');
+            }
+
+            // Update guilt meter
+            const meter = document.getElementById('guiltMeter');
+            meter.style.width = `${guilt}%`;
+            if (guilt >= 90) {
+                meter.style.backgroundColor = '#FF0000';
+            } else if (guilt >= 50) {
+                meter.style.backgroundColor = '#FFFF00';
+            } else {
+                meter.style.backgroundColor = '#00FF00';
+            }
+
+            // Check win condition
+            if (guilt < 92 && currentState === 'interrogation') {
+                document.getElementById('finalGuilt').textContent = Math.round(guilt);
+                showScreen('victory');
+                clearInterval(timerInterval);
+            }
+
+            updateStatus();
+        }
+
+        function updateStatus() {
+            document.getElementById('status').innerHTML = 
+                `State: ${currentState}<br>` +
+                `Guilt: ${Math.round(guilt)}%<br>` +
+                `Time: ${Math.floor(timeRemaining/60)}:${String(timeRemaining%60).padStart(2,'0')}<br>` +
+                `Paused: ${isPaused ? 'Yes' : 'No'}`;
+        }
+
+        function adjustGuilt(amount) {
+            guilt = Math.max(0, Math.min(100, guilt + amount));
+            updateDisplay();
+        }
+
+        function adjustTime(seconds) {
+            timeRemaining = Math.max(0, Math.min(5400, timeRemaining + seconds));
+            updateDisplay();
+        }
+
+        function skipToWin() {
+            guilt = 90;
+            updateDisplay();
+        }
+
+        function skipToLose() {
+            guilt = 95;
+            timeRemaining = 0;
+            updateDisplay();
+            setTimeout(() => showScreen('gameover'), 100);
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            updateStatus();
+        }
+
+        function restartGame() {
+            startGame();
+        }
+
+        function mainMenu() {
+            if (timerInterval) clearInterval(timerInterval);
+            showScreen('mainMenu');
+        }
+
+        // Toggle testing panel with 'T' key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 't' || e.key === 'T') {
+                document.getElementById('testingPanel').classList.toggle('visible');
+            }
+        });
+
+        updateDisplay();
+    </script>
+</body>
+</html>
